@@ -6,103 +6,169 @@
 </head>
 
 <body>
-	<h4> 1...all baseball leagues</h4>
+	<h4>1...all teams in the Atlantic Soccer Conference</h4>
 	<ol>
-		{% for baseball  in all_leagues %}
-		<li>{{baseball.name}}</li>
+		{% for league in atlantic_teams %}
+		{% for team in league.teams.all %}
+		<li>{{team.team_name}}</li>
+		{% endfor %}
 		{% endfor %}
 	</ol>
-	<h4>2...all womens' leagues</h4>
+	<h4>2...all (current) players on the Boston Penguins</h4>
 	<ol>
-		{% for wleage in wleagues %}
-		<li>{{wleage.name}}</li>
-		{% endfor%}
-	</ol>
-	<h4>3..all leagues where sport is any type of hockey
-	</h4>
-	<ol>
-		{% for league in hockey_leagues %}
-		<li>{{league.sport}}</li>
+		{% for team in bostons %}
+		{% for cur_player in team.curr_players.all %}
+		<li>{{cur_player.first_name}} {{cur_player.last_name}}</li>
+		{% endfor %}
 		{% endfor %}
 	</ol>
-	<h4>4...all leagues where sport is something OTHER THAN football</h4>
+	<h4>3...all (current) players in the International Collegiate Baseball Conference</h4>
 	<ol>
-		{% for sport_type in allsports %}
-		<li>{{sport_type.sport}}</li>
+		{% for league in cols %}
+			{% for team in league.teams.all %}
+				{% for player in team.curr_players.all %}
+					<li>{{ player.first_name}} {{player.last_name}}</li>
+				{% endfor %}
+			{% endfor %}
 		{% endfor %}
 	</ol>
-	<h4>5...all leagues that call themselves "conferences"</h4>
+	<h4>4...all (current) players in the American Conference of Amateur Football with last name "Lopez"</h4>
 	<ol>
-		{% for league in conference_leagues %}
+		{% for league in amteures %}
+			{% for team in league.teams.all %}
+				{% for player in team.curr_players.all %}
+				{% if player.last_name == "Lopez" %}
+				<li>{{player.first_name}} {{player.last_name}}</li>
+				{% endif %}
+				{% endfor %}
+			{% endfor %}
+		{% endfor %}
+	</ol>
+	<h4>5...all football players</h4>
+	<ol>
+		{% for league in ftplayers %}
+			{% for team in league.teams.all %}
+				{% for player in team.curr_players.all%}
+					<li>{{player.first_name}} {{player.last_name}}</li>
+				{% endfor %}
+			{% endfor %}
+		{% endfor %}
+	</ol>
+	<h4>6...all teams with a (current) player named "Sophia"</h4>
+	<ol>
+		{% for team in teams %}
+			{% for player in team.curr_players.all %}
+				{% if player.first_name == "Sophia" %}
+				<li>{{team.team_name}}</li>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+	</ol>
+<h4>7...all leagues with a (current) player named "Sophia"</h4>
+<ol>
+{% for league in leagues %}
+	{% for team in league.teams.all %}
+		{% for player in team.curr_players.all %}
+			{% if player.first_name == "Sophia" %}
+				<li>{{league.name}}</li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+{% endfor %}
+</ol>
+<h4>8...everyone with the last name "Flores" who DOESN'T (currently) play for the Washington Roughriders</h4>
+<ol>
+	{% for player in players %}
+		{% if player.last_name == "Flores" and player.curr_team.team_name != "Roughriders"%}
+			<li>{{player.first_name}} {{player.last_name}}</li>
+		{% endif %}
+	{% endfor %}
+</ol>
+<h4>9...all teams, past and present, that Samuel Evans has played with</h4>
+<ol>
+	{% for player in evens %}
+		{% for team in player.all_teams.all %}
+			<li>{{team.team_name}}</li>
+		{% endfor %}
+	{% endfor %}
+</ol>
+<h4>10...all players, past and present, with the Manitoba Tiger-Cats</h4>
+<ol>
+	{% for team in cats %}
+		{% for player in team.all_players.all %}
+			<li>{{player.first_name}} {{player.last_name}}</li>
+		{% endfor %}
+	{% endfor %}
+</ol>
+<h4>11...all players who were formerly (but aren't currently) with the Wichita Vikings</h4>
+<ol>
+	{% for viki in vikings %}
+		{% for player in viki.all_players.all %}
+			{% if player not in viki.curr_players.all%}
+			<li>{{player.first_name}} {{player.last_name}}</li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+</ol>
+<h4>12.every team that Jacob Gray played for before he joined the Oregon Colts</h4>
+<ol>
+	{% for jk in jakes %}
+		{% for team in jk.all_teams.all %}
+			{% if team.team_name != jk.curr_team.team_name%}
+				<li>{{team.team_name}}</li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+</ol>
+<h4>13...everyone named "Joshua" who has ever played in the Atlantic Federation of Amateur Baseball Players</h4>
+<ol>
+	{% for j in joshes %}
+		{% for team in j.teams.all %}
+			{% for player in team.all_players.all %}
+				{% if player.first_name == "Joshua"%}
+				<li>{{player.first_name}} {{player.last_name}}</li>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+	{% endfor %}
+</ol>
+<h4>14...all teams that have had 12 or more players, past and present. (HINT: Look up the Django annotate function.)</h4>
+
+<ol>
+	{% for team in teams %}
+		{% if team.all_players.all.count >= 12 %}
+			<li>{{team.team_name}}</li>
+		{% endif %}
+	{% endfor %}
+</ol>
+<h4>15...all players and count of teams played for, sorted by the number of teams they've played for</h4>
+<ol>
+	{% for player in players %}
+		<li>{{player.first_name}} {{player.last_name}} {{player.all_teams.all.count}}</li>
+	{% endfor %}
+</ol>
+
+	<hr>
+	<h4>Leagues</h4>
+	<ol>
+		{% for league in leagues %}
 		<li>{{league.name}}</li>
 		{% endfor %}
 	</ol>
-	<h4>6...all leagues in the Atlantic region</h4>
+
+	<h4>Teams</h4>
 	<ol>
-		{%for league in all_atlantics %}
-		<li>{{league.name}}</li>
-		{% endfor %}
+	{% for team in teams %}
+<li>{{team.team_name}}</li>
+	{% endfor %}
 	</ol>
-	<h4>7...all teams based in Dallas</h4>
+	<h4>Players </h4>
 	<ol>
-		{% for team in dallas_teams %}
-		<li>{{team.team_name}}</li>
-		{% endfor %}
-	</ol>
-	<h4>8...all teams named the Raptors</h4>
-	<ol>
-		{% for team in raptors %}
-		<li>{{team.location}} {{team.team_name}}</li>
-		{% endfor %}
-	</ol>
-	<h4>9...all teams whose location includes "City"</h4>
-	<ol>
-		{% for team in city_teams %}
-		<li>{{team.location}}</li>
-		{% endfor %}
-	</ol>
-	<h4>10...all teams whose names begin with "T"</h4>
-	<ol>
-		{% for team in t_teams %}
-		<li>{{team.team_name}}</li>
-		{% endfor %}
-	</ol>
-	<h4>11...all teams, ordered alphabetically by location</h4>
-	<ol>
-		{% for team in teams_locations %}
-		<li>{{team.location}}</li>
-		{% endfor %}
-	</ol>
-	<h4>12...all teams, ordered by team name in reverse alphabetical order</h4>
-	<ol>
-		{% for team in reverse_teams%}
-		<li>{{team.team_name}}</li>
-		{% endfor %}
-	</ol>
-	<h4>13...every player with last name "Cooper"</h4>
-	<ol>
-		{% for player in cooper_players %}
+		{% for player in players %}
 		<li>{{player.first_name}} {{player.last_name}}</li>
 		{% endfor %}
 	</ol>
-	<h4>14...every player with first name "Joshua"</h4>
-	<ol>
-		{% for player in ju_players %}
-		<li>{{player.first_name}} {{player.last_name}}</li>
-		{% endfor %}
-	</ol>
-	<h4>15...every player with last name "Cooper" EXCEPT those with "Joshua" as the first name</h4>
-	<ol>
-		{% for cooper in coopers %}
-		<li>{{cooper.first_name}} {{cooper.last_name}}</li>
-		{% endfor %}
-	</ol>
-	<h4>16...all players with first name "Alexander" OR first name "Wyatt"</h4>
-	<ol>
-		{% for alx_wyat in alexwyats %}
-		<li>{{alx_wyat.first_name}}</li>
-		{% endfor %}
-	</ol>
+
 </body>
 
 </html>
